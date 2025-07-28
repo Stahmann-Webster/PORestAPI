@@ -23,13 +23,22 @@ namespace POManagerAPI.Controllers
             return Ok(po);
         }
 
-        [HttpPost("goodsreceipt")]
-        public IActionResult SubmitGoodsReceipt([FromBody] GoodsReceiptRequest request)
-        {
-            var success = _service.SubmitGoodsReceipt(request.PONumber, request.SSCC, request.Quantity);
-            if (!success) return BadRequest("Failed to submit goods receipt.");
-            return Ok("Goods receipt submitted successfully.");
-        }
+      
+[HttpPost("goodsreceipt")]
+public IActionResult SubmitGoodsReceipt([FromBody] GoodsReceiptRequest request)
+{
+    try
+    {
+        var success = _service.SubmitGoodsReceipt(request.PONumber, request.SSCC, request.Quantity);
+        if (!success) return BadRequest("Failed to submit goods receipt.");
+        return Ok("Goods receipt submitted successfully.");
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Internal error: {ex.Message}");
+    }
+}
+
     }
 
     public class GoodsReceiptRequest
